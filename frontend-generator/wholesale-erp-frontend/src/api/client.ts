@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
 // Dynamically use Vercel's environment variable in production, or localhost in development
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/v1';
+const API_BASE_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:4000/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
