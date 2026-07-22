@@ -1,8 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
+// Dynamically use Vercel's environment variable in production, or localhost in development
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api/v1';
+
 export const api = axios.create({
-  baseURL: 'http://localhost:4000/api/v1',
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -30,8 +33,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login') {
       originalRequest._retry = true;
       try {
+        // Use the dynamic API_BASE_URL instead of hardcoding localhost
         const { data } = await axios.post(
-          'http://localhost:4000/api/v1/auth/refresh',
+          `${API_BASE_URL}/auth/refresh`,
           {},
           { withCredentials: true }
         );
